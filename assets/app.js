@@ -1,38 +1,9 @@
 let searchTerm = 'Raleigh';
 
-let col1 = $('<div class="col s1"></div>');
-$('#extendedForecast').append(col1);
-
-for (let i = 0; i < 5; i++) {
-    let middleCol = $('<div class="col s2"></div>');
-    let cardRow = $('<div class="row"></div>');
-    let cardCol = $('<div class="col s12"></div>');
-    let card = $('<div class="card small"></div>');
-    
-    let cardImgDiv = $('<div class="card-image"></div>');
-    let cardImg = $('<img src="images/sample-1.jpg">');
-    let cardSpan = $('<span class="card-title"></span>').text('Card Title');
-    cardImgDiv.append(cardImg,cardSpan);
-    
-    let cardContent = $('<div class="card-content">');
-    let contentP = $(`<p></p>`).text(`I am a very simple card. I am good at containing small bits of information.
-        I am convenient because I require little markup to use effectively.`);
-    cardContent.append(contentP);
-    
-    let cardAction = $('<div class="card-action"></div>');
-    let actionA = $('<a href="#"></a>').text('This is a link');
-    cardAction.append(actionA);
-    
-    card.append(cardImgDiv,cardContent,cardAction);
-    cardCol.append(card);
-    cardRow.append(cardCol);
-    middleCol.append(cardRow);
-
-    $('#extendedForecast').append(middleCol);
-}
-
-let col6 = $('<div class="col s1"></div>');
-$('#extendedForecast').append(col6);
+// let iconUrl = 'https://api.iconfinder.com/v3/icons/search?';
+// iconUrl += 'client_id=mXK8DHYcamId9eZ9lMHRipV2zSMQdn3oPi1GkmT12Pq4FmKtTPiNqfmIxsgNb93W&';
+// iconUrl += 'client_secret=gV3NcGeUtZlQIpY1peUeGNUJy70dJaojzJ66TBnBiEahY5pPR8xaDiluftnR19Mt&';
+// iconUrl += 'count=1&premium=0&query=';
 
 $('#searchIcon').click(function() {
     let status = $('form').css('visibility');
@@ -42,11 +13,60 @@ $('#searchIcon').click(function() {
 $('#runSearch').click(function() {
     searchTerm = $('input').val();
     $('input').val('');
-    runSearch(searchTerm);
+    runSearch();
 });
 
-function runSearch(query) {
-    $.get(`https://api.openweathermap.org/data/2.5/weather?q=${searchTerm}`).then(resp=>{
+function runSearch() {
+    $.get(`https://api.openweathermap.org/data/2.5/weather?APPID=833a5451ef3423413fe6e789b8687cf3&q=${searchTerm}&units=imperial`).then(resp=>{
         console.log(resp);
+        $('#currentIcon').prepend(`<img width=300 height=200 src="http://openweathermap.org/img/wn/${resp.weather[0].icon}@2x.png" alt="Current Icon">`);
+        $('#weatherDesc').text(resp.weather[0].description);
+        $('#todaysForecast').attr('style', 'visibility: visible');
+        printExtendedForecast();
+    });
+}
+
+function printExtendedForecast() {
+    $.get(`https://api.openweathermap.org/data/2.5/forecast?APPID=833a5451ef3423413fe6e789b8687cf3&q=${searchTerm}&units=imperial`).then(resp=>{
+        console.log(resp);
+        let today = new Date();
+        const filteredForecastList = resp.list
+            .filter(item=>new Date(item.dt_txt).getDate() != today.getDate())
+            .filter(item=>new Date(item.dt_txt).getHours() === 12);
+        console.log(filteredForecastList);
+
+        let col1 = $('<div class="col s1"></div>');
+        $('#extendedForecast').append(col1);
+
+        for (let i = 0; i < filteredForecastList.length; i++) {
+
+            let middleCol = $('<div class="col s2"></div>');
+            let cardRow = $('<div class="row"></div>');
+            let cardCol = $('<div class="col s12"></div>');
+            let card = $('<div class="card small"></div>');
+            
+            let cardImgDiv = $('<div class="card-image"></div>');
+            let cardImg = $(`<img src="http://openweathermap.org/img/wn/${filteredForecastList[i].weather[0].icon}@2x.png" alt=${filteredForecastList[i].weather[0].main}>`);
+            let cardSpan = $('<span class="card-title"></span>');
+            cardImgDiv.append(cardImg,cardSpan);
+            
+            let cardContent = $('<div class="card-content">');
+            let contentP = $(`<p></p>`).text(filteredForecastList[i].weather[0].description);
+            cardContent.append(contentP);
+            
+            let cardAction = $('<div class="card-action"></div>');
+            let actionA = $('<a href="#"></a>').text('This is a link');
+            cardAction.append(actionA);
+            
+            card.append(cardImgDiv,cardContent,cardAction);
+            cardCol.append(card);
+            cardRow.append(cardCol);
+            middleCol.append(cardRow);
+
+            $('#extendedForecast').append(middleCol);
+        }
+
+        let col6 = $('<div class="col s1"></div>');
+        $('#extendedForecast').append(col6);
     });
 }

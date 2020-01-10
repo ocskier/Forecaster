@@ -21,16 +21,16 @@
           </ul>
         </div>
     </nav>
-    <div class="row">
+    <div class="row" style="margin-top: 20px;">
         <div class="col s3">
           <!-- Searchable Cities -->
           <form style="visibility: hidden;">
             <div class="input-field">
               <input id="search" type="search" required style="width: 70%;margin: 0 auto;border-bottom: solid 1px black;">
-              <label class="label-icon" for="search" style="font-size: 2rem;">
+              <label class="label-icon" for="search" style="font-size: 2rem; left: 0;">
                 <i id="runSearch" class="material-icons">search</i>
               </label>
-              <i class="material-icons" style="top: 20%">close</i>
+              <i class="material-icons" style="top: 20%; right: 0;">close</i>
             </div>
           </form>
           <ul class="collection">
@@ -40,21 +40,21 @@
         <div class="col s9">
           <!-- Todays Forecast  -->
           <div class="row">
-            <div class="col s12">
-              <div class="card large" style="height: 400px;">
-                <div class="card-image">
-                  <img src="images/sample-1.jpg">
-                  <span class="card-title">Card Title</span>
+            <div class ="col s2"></div>
+            <div class="col s8">
+              <div id="todaysForecast" class="card large" style="height: 400px; visibility: hidden;">
+                <div id="currentIcon" class="card-image" style="width: 50%; margin: 0 auto;">
+                  <span class="card-title"></span>
                 </div>
                 <div class="card-content">
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                  I am convenient because I require little markup to use effectively.</p>
+                  <p id="weatherDesc"></p>
                 </div>
                 <div class="card-action">
                   <a href="#">This is a link</a>
                 </div>
               </div>
             </div>
+            <div class="col s2"></div>
           </div>
         </div>
     </div>
