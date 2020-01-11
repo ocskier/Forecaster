@@ -21,6 +21,7 @@ function runSearch() {
         console.log(resp);
         $('#currentIcon').prepend(`<img width=300 height=200 src="http://openweathermap.org/img/wn/${resp.weather[0].icon}@2x.png" alt="Current Icon">`);
         $('#weatherDesc').text(resp.weather[0].description);
+        $('#weatherDetails').append(printWeatherDetails(resp));
         $('#todaysForecast').attr('style', 'visibility: visible');
         printExtendedForecast();
     });
@@ -43,16 +44,19 @@ function printExtendedForecast() {
             let middleCol = $('<div class="col s2"></div>');
             let cardRow = $('<div class="row"></div>');
             let cardCol = $('<div class="col s12"></div>');
-            let card = $('<div class="card small"></div>');
+            let card = $('<div class="card small" style="height: 400px; display: flex; flex-direction: column;"></div>');
             
             let cardImgDiv = $('<div class="card-image"></div>');
             let cardImg = $(`<img src="http://openweathermap.org/img/wn/${filteredForecastList[i].weather[0].icon}@2x.png" alt=${filteredForecastList[i].weather[0].main}>`);
-            let cardSpan = $('<span class="card-title"></span>');
+            let cardSpan = $(`<span class="card-title" style="top: -10%;font-size: 1rem; color: black;">
+                ${new Date(filteredForecastList[i].dt_txt).toLocaleDateString('en-US')}</span>`);
             cardImgDiv.append(cardImg,cardSpan);
             
-            let cardContent = $('<div class="card-content">');
+            let cardContent = $('<div class="card-content" style="font-size: 0.8rem;">');
             let contentP = $(`<p></p>`).text(filteredForecastList[i].weather[0].description);
-            cardContent.append(contentP);
+            let contentDetails = $(printWeatherDetails(filteredForecastList[i]));
+            let contentPrecip = $(`<p>Precip: ${filteredForecastList[i]['rain'] ? filteredForecastList[i].rain['3h'] : 0}</p>`)
+            cardContent.append(contentP,contentDetails,contentPrecip);
             
             let cardAction = $('<div class="card-action"></div>');
             let actionA = $('<a href="#"></a>').text('This is a link');
@@ -69,4 +73,8 @@ function printExtendedForecast() {
         let col6 = $('<div class="col s1"></div>');
         $('#extendedForecast').append(col6);
     });
+}
+
+function printWeatherDetails(details) {
+    return `<span>High: ${details.main.temp_max} Low: ${details.main.temp_min} Wind: ${details.wind.speed} mph Humidity: ${details.main.humidity}%</span>`
 }
