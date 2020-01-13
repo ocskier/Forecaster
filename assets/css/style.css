@@ -1,0 +1,20 @@
+body {
+    background-image: url('../kenrick-mills-1h2Pg97SXfA-unsplash.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+nav {
+    box-shadow: 0px 0px 30px 5px white;
+}
+
+#todaysForecast {
+    height: 425px;
+    background-color:lightgray;
+    box-shadow: 0px 0px 20px 0px white;
+}
+
+.card {
+    border-radius: 15px;
+}

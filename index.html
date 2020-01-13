@@ -7,7 +7,7 @@
     <title>Document</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link type="text/css" href="assets/style.css" rel="stylesheet">
+    <link type="text/css" href="assets/css/style.css" rel="stylesheet">
 </head>
 <body>
     <nav style="height: 160px; background-color: lightblue; padding: 0 12px;">
@@ -15,9 +15,9 @@
           <a href="#!" class="brand-logo" style="position: relative;"><i class="material-icons">cloud</i>Forecaster</a>
           <ul class="right hide-on-med-and-down">
             <li><i id="searchIcon" class="material-icons">search</i></li>
-            <li><a href="badges.html"><i class="material-icons">view_module</i></a></li>
-            <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
-            <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
+            <li><a href="#"><i class="material-icons">view_module</i></a></li>
+            <li><a href="#"><i class="material-icons">refresh</i></a></li>
+            <li><a href="#"><i class="material-icons">more_vert</i></a></li>
           </ul>
         </div>
     </nav>
@@ -28,7 +28,7 @@
             <div class="input-field">
               <input id="search" type="search" required style="width: 70%;margin: 0 auto;border-bottom: solid 1px black;">
               <label class="label-icon" for="search" style="font-size: 2rem; left: 0;">
-                <i id="runSearch" class="material-icons">search</i>
+                <i id="runSearch" class="material-icons" style="color: black;">search</i>
               </label>
               <i class="material-icons" style="top: 20%; right: 0;">close</i>
             </div>
@@ -44,11 +44,11 @@
             <div class="col s8">
               <div id="todaysForecast" class="card large center" style="visibility: hidden;">
                 <div id="currentIcon" class="card-image" style="width: 50%; margin: 0 auto;">
-                  <span class="card-title">Today's Forecast</span>
+                  <span class="card-title" style="position: relative;top:0;bottom:0;left:0;font-size: 1.5rem;color: black;">Today's Forecast</span>
                 </div>
                 <div class="card-content">
-                  <p id="weatherDesc"></p>
-                  <p id="weatherDetails"></p>
+                  <p id="weatherDesc" style="font-size: 2.4rem;padding-bottom: 10px;"></p>
+                  <p id="weatherDetails" style="display: flex;justify-content: space-around;"></p>
                 </div>
                 <div class="card-action">
                   <a href="#">This is a link</a>
@@ -64,6 +64,6 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script type="text/javascript" src="assets/app.js"></script>
+    <script type="text/javascript" src="assets/js/app.js"></script>
 </body>
 </html>
