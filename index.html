@@ -1,69 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link type="text/css" href="assets/css/style.css" rel="stylesheet">
-</head>
-<body>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link type="text/css" href="assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
     <nav style="height: 160px; background-color: lightblue; padding: 0 12px;">
-        <div class="nav-wrapper" style="display: flex; justify-content: space-between; align-items: center;">
-          <a href="#!" class="brand-logo" style="position: relative;"><i class="material-icons">cloud</i>Forecaster</a>
-          <ul class="right hide-on-med-and-down">
-            <li><i id="searchIcon" class="material-icons">search</i></li>
-            <li><a href="#"><i class="material-icons">view_module</i></a></li>
-            <li><a href="#"><i class="material-icons">refresh</i></a></li>
-            <li><a href="#"><i class="material-icons">more_vert</i></a></li>
-          </ul>
-        </div>
+      <div
+        class="nav-wrapper"
+        style="display: flex; justify-content: space-between; align-items: center;"
+      >
+        <a href="#!" class="brand-logo" style="position: relative;"
+          ><i class="material-icons">cloud</i>Forecaster</a
+        >
+        <ul class="right hide-on-med-and-down">
+          <li><i id="searchIcon" class="material-icons">search</i></li>
+          <li>
+            <a href="#"><i class="material-icons">view_module</i></a>
+          </li>
+          <li>
+            <a href="#"><i class="material-icons">refresh</i></a>
+          </li>
+          <li>
+            <a href="#"><i class="material-icons">more_vert</i></a>
+          </li>
+        </ul>
+      </div>
     </nav>
     <div class="row" style="margin-top: 20px;">
-        <div class="col s3">
-          <!-- Searchable Cities -->
-          <form style="visibility: hidden;">
-            <div class="input-field">
-              <input id="search" type="search" required style="width: 70%;margin: 0 auto;border-bottom: solid 1px black;">
-              <label class="label-icon" for="search" style="font-size: 2rem; left: 0;">
-                <i id="runSearch" class="material-icons" style="color: black;">search</i>
-              </label>
-              <i class="material-icons" style="top: 20%; right: 0;">close</i>
-            </div>
-          </form>
-          <ul class="collection">
-            <li class="collection-item">Alvin</li>
-          </ul>
-        </div>
-        <div class="col s9">
-          <!-- Todays Forecast  -->
-          <div class="row">
-            <div class ="col s2"></div>
-            <div class="col s8">
-              <div id="todaysForecast" class="card large center" style="visibility: hidden;">
-                <div id="currentIcon" class="card-image" style="width: 50%; margin: 0 auto;">
-                  <span class="card-title" style="position: relative;top:0;bottom:0;left:0;font-size: 1.5rem;color: black;">Today's Forecast</span>
-                </div>
-                <div class="card-content">
-                  <p id="weatherDesc" style="font-size: 2.4rem;padding-bottom: 10px;"></p>
-                  <p id="weatherDetails" style="display: flex;justify-content: space-around;"></p>
-                </div>
-                <div class="card-action">
-                  <a href="#">This is a link</a>
-                </div>
+      <div class="col s3">
+        <!-- Searchable Cities -->
+        <form style="visibility: hidden;">
+          <div class="input-field">
+            <input
+              id="search"
+              type="search"
+              required
+              style="width: 70%;margin: 0 auto;border-bottom: solid 1px black;"
+            />
+            <label
+              class="label-icon"
+              for="search"
+              style="font-size: 2rem; left: 0;"
+            >
+              <i id="runSearch" class="material-icons" style="color: black;"
+                >search</i
+              >
+            </label>
+            <i class="material-icons" style="top: 20%; right: 0;">close</i>
+          </div>
+        </form>
+        <ul class="collection">
+          <li class="collection-item">Alvin</li>
+        </ul>
+      </div>
+      <div class="col s9">
+        <!-- Todays Forecast  -->
+        <div class="row">
+          <div class="col s2"></div>
+          <div class="col s8">
+            <h2 class="center"></h2>
+            <div
+              id="todaysForecast"
+              class="card large center"
+              style="visibility: hidden;"
+            >
+              <div
+                id="currentIcon"
+                class="card-image"
+                style="width: 50%; margin: 0 auto;"
+              >
+                <span
+                  class="card-title"
+                  style="position: relative;top:0;bottom:0;left:0;font-size: 1.5rem;color: black;"
+                  >Today's Forecast</span
+                >
+              </div>
+              <div class="card-content" style="margin-top: -30px;">
+                <div
+                  id="weatherDesc"
+                  style="font-size: 2.4rem;padding-bottom: 10px;"
+                ></div>
+                <div
+                  id="weatherDetails"
+                  style="display: flex; flex-direction: column;"
+                ></div>
+              </div>
+              <div class="card-action">
+                <a href="#">This is a link</a>
               </div>
             </div>
-            <div class="col s2"></div>
           </div>
+          <div class="col s2"></div>
         </div>
+      </div>
     </div>
-    <div id="extendedForecast" class="row">
-    </div>
+    <div id="extendedForecast" class="row"></div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script type="text/javascript" src="assets/js/app.js"></script>
-</body>
+  </body>
 </html>

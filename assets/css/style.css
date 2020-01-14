@@ -1,20 +1,36 @@
 body {
-    background-image: url('../kenrick-mills-1h2Pg97SXfA-unsplash.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  background-image: url('../kenrick-mills-1h2Pg97SXfA-unsplash.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 nav {
-    box-shadow: 0px 0px 30px 5px white;
+  box-shadow: 0px 0px 30px 5px white;
+}
+
+#search {
+  padding: 6px;
 }
 
 #todaysForecast {
-    height: 425px;
-    background-color:lightgray;
-    box-shadow: 0px 0px 20px 0px white;
+  height: auto;
+  min-height: 475px;
+  background-color: lightgray;
+  box-shadow: 0px 0px 20px 0px white;
 }
 
 .card {
-    border-radius: 15px;
+  border-radius: 15px;
+}
+
+.forecastCard {
+  height: 100% !important;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  background-color: lightblue;
+  color: darkblue;
+  box-shadow: 0px 0px 10px 0px white;
+  border-radius: 15px;
 }
