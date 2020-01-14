@@ -68,7 +68,7 @@ function printExtendedForecast() {
       .filter(item => new Date(item.dt_txt).getDate() != today.getDate())
       .filter(item => new Date(item.dt_txt).getHours() === 12);
 
-    let col1 = $('<div class="col s1"></div>');
+    let col1 = $('<div class="col s12 l1"></div>');
     $('#extendedForecast').append(col1);
 
     for (let i = 0; i < filteredForecastList.length; i++) {
@@ -85,7 +85,7 @@ function printExtendedForecast() {
       let contentP = $('<p></p>');
       let contentPrecip = $('<p></p>');
 
-      middleCol.addClass('col s2');
+      middleCol.addClass('col s12 l2 extendedCol');
       cardRow.addClass('row');
       cardCol.addClass('col s12');
       card.addClass('card small forecastCard');
@@ -98,7 +98,7 @@ function printExtendedForecast() {
         ].weather[0].icon.slice(0, 2)}d@2x.png`
       );
       cardImg.attr('alt', `${filteredForecastList[i].weather[0].main}`);
-      cardSpan.addClass('card-title');
+      cardSpan.addClass('card-title extendedTitle');
       cardSpan.attr(
         'style',
         'top: -10%;font-size: 1rem;color: darkblue;width: 100%;margin: 0 auto;text-align: center;'
@@ -150,7 +150,7 @@ function printExtendedForecast() {
       $('#extendedForecast').append(middleCol);
     }
 
-    let col6 = $('<div class="col s1"></div>');
+    let col6 = $('<div class="col s12 l1"></div>');
     $('#extendedForecast').append(col6);
   });
 }

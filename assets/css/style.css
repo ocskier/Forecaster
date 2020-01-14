@@ -1,5 +1,5 @@
 body {
-  background-image: url('../kenrick-mills-1h2Pg97SXfA-unsplash.jpg');
+  background-image: url('../kenrick-mills-1h2Pg97SXfA-unsplash-min.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -26,11 +26,20 @@ nav {
 
 .forecastCard {
   height: 100% !important;
-  min-height: 350px;
+  min-height: 395px;
   display: flex;
   flex-direction: column;
   background-color: lightblue;
   color: darkblue;
   box-shadow: 0px 0px 10px 0px white;
   border-radius: 15px;
+}
+
+@media only screen and (max-width: 576px) {
+  .extendedCol {
+    padding: 0 25% !important;
+  }
+  .extendedTitle {
+    top: 0 !important;
+  }
 }
