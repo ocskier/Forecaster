@@ -1,9 +1,21 @@
-let searchTerm = 'Raleigh';
+// const iconData = {
+//   clearsky: '' 
+// };
+
+let searchedList = JSON.parse(localStorage.getItem('searchedList')) || [];
+let lastSearch = localStorage.getItem('lastSearch') || 'Raleigh';
+
+const searchUrl =
+  'https://api.openweathermap.org/data/2.5/weather?APPID=833a5451ef3423413fe6e789b8687cf3&units=imperial';
+const forecastUrl =
+  'https://api.openweathermap.org/data/2.5/forecast?APPID=833a5451ef3423413fe6e789b8687cf3&units=imperial';
 
 // let iconUrl = 'https://api.iconfinder.com/v3/icons/search?';
 // iconUrl += 'client_id=mXK8DHYcamId9eZ9lMHRipV2zSMQdn3oPi1GkmT12Pq4FmKtTPiNqfmIxsgNb93W&';
 // iconUrl += 'client_secret=gV3NcGeUtZlQIpY1peUeGNUJy70dJaojzJ66TBnBiEahY5pPR8xaDiluftnR19Mt&';
 // iconUrl += 'count=1&premium=0&query=';
+
+init();
 
 $('#searchIcon').click(() => {
   let status = $('form').css('visibility');
@@ -13,25 +25,50 @@ $('#searchIcon').click(() => {
   );
 });
 
-$('#runSearch').click(() => {
-  searchTerm = $('input').val();
+$('form').submit((e)=>{
+  e.preventDefault();
+  lastSearch = $('input').val();
   $('input').val('');
-  runSearch();
+  lastSearch && runSearch(lastSearch);
 });
 
-function runSearch() {
+$('.searchListItem').click(function() {
+  lastSearch = $(this).text();
+  lastSearch && runSearch(lastSearch);
+});
+
+async function init() {
+    searchedList && printSearchedCities();  
+    runSearch(lastSearch);  
+}
+
+function printSearchedCities() {
+  $('.collection').empty();
+  let collection = $('.collection');
+  collection.attr('style', 'visibility: visible');
+  for (let i = 0; i < searchedList.length; i++) {
+    collection.append(`<li class="collection-item searchListItem">${searchedList[i]}</li>`)
+  }
+}
+
+function buildUrl(baseUrl,extendedUrl) {
+  return baseUrl+extendedUrl
+}
+
+function runSearch(searchTerm) {
   for (el in ['h2', '#weatherDesc']) {
     $(el).text('');
   }
   $('#weatherDetails').empty();
   $('#currentIcon img').remove();
 
-  let searchUrl =
-    'https://api.openweathermap.org/data/2.5/weather?APPID=833a5451ef3423413fe6e789b8687cf3';
-  searchUrl += `&q=${searchTerm}&units=imperial`;
-
-  $.get(searchUrl).then(resp => {
-    console.log(resp);
+  $.get(buildUrl(searchUrl,`&q=${searchTerm}`)).then(resp => {
+    if (searchedList.indexOf(searchTerm) === -1) {
+      searchedList.push(searchTerm);
+      localStorage.setItem('searchedList', JSON.stringify(searchedList));
+      printSearchedCities();
+    }
+    localStorage.setItem('lastSearch', searchTerm);
     $('h2').text(resp.name);
     let imgHTML =
       '<img width=300 height=200 src="http://openweathermap.org/img/wn/';
@@ -52,17 +89,16 @@ function runSearch() {
       </div>`
     );
     $('#todaysForecast').attr('style', 'visibility: visible');
-    printExtendedForecast();
+    printExtendedForecast(searchTerm);
+  }).catch((err) => {
+    console.log(err);
   });
 }
 
-function printExtendedForecast() {
+function printExtendedForecast(searchTerm) {
   $('#extendedForecast').empty();
-  let forecastUrl =
-    'https://api.openweathermap.org/data/2.5/forecast?APPID=833a5451ef3423413fe6e789b8687cf3';
-  forecastUrl += `&q=${searchTerm}&units=imperial`;
-  $.get(forecastUrl).then(resp => {
-    console.log(resp);
+
+  $.get(buildUrl(forecastUrl,`&q=${searchTerm}`)).then(resp => {
     let today = new Date();
     const filteredForecastList = resp.list
       .filter(item => new Date(item.dt_txt).getDate() != today.getDate())
@@ -99,25 +135,19 @@ function printExtendedForecast() {
       );
       cardImg.attr('alt', `${filteredForecastList[i].weather[0].main}`);
       cardSpan.addClass('card-title extendedTitle');
-      cardSpan.attr(
-        'style',
-        'top: -10%;font-size: 1rem;color: darkblue;width: 100%;margin: 0 auto;text-align: center;'
-      );
       cardSpan.text(
         new Date(filteredForecastList[i].dt_txt).toLocaleDateString('en-US')
       );
-      cardImgDiv.append(cardImg, cardSpan);
+      cardImgDiv.append(cardSpan, cardImg);
 
-      cardContent.addClass('card-content center');
-      cardContent.attr('style', 'font-size: 0.8rem;');
-      contentP.attr('style', 'font-size: 1.3rem;padding-bottom:10px;');
+      cardContent.addClass('card-content center extendedContent');
+      contentP.addClass('extendedText');
       let todaysWeather = filteredForecastList[i].weather[0];
       contentP.text(
         todaysWeather.description[0].toUpperCase() +
           todaysWeather.description.slice(1)
       );
-      contentDetails.attr('style', 'display:flex;flex-direction:column;');
-      contentDetails.html(
+      contentDetails.addClass('extendedDetails').html(
         `<span style="font-size:2.2rem">${Math.round(
           filteredForecastList[i].main.temp_max
         )}°F</span>
@@ -138,7 +168,6 @@ function printExtendedForecast() {
 
       cardAction
         .addClass('card-action')
-        .attr('style', 'position: relative; display: none');
       let actionA = $('<a href="#"></a>').text('This is a link');
       cardAction.append(actionA);
 
@@ -152,5 +181,8 @@ function printExtendedForecast() {
 
     let col6 = $('<div class="col s12 l1"></div>');
     $('#extendedForecast').append(col6);
+  }).catch((err) => {
+    console.log(err);
   });
 }
+
