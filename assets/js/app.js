@@ -1,6 +1,27 @@
-// const iconData = {
-//   clearsky: '' 
-// };
+const iconData = {
+  clear: {
+    day:'assets/icons/iconfinder_weather-clear_118959.png',
+    night: 'assets/icons/iconfinder_weather-icons-night-clear_2087717.png'
+  },
+  clouds: {
+    day: 'assets/icons/iconfinder_icon-20-clouds_316271.png'
+  },
+  rain: {
+    day: 'assets/icons/iconfinder_weather-showers-scattered_118964.png'
+  },
+  thunderstorm: {
+    day: 'assets/icons/iconfinder_thunderstorm-ranny_1221016.png'
+  },
+  snow: {
+    day: 'assets/icons/iconfinder_cloud_snow_367530.png'
+  },
+  mist: {
+    day: 'assets/icons/iconfinder_weather_30_2682821.png'
+  },
+  drizzle: {
+    day: 'assets/icons/iconfinder_weather-showers-scattered_118964.png'
+  }
+};
 
 let searchedList = JSON.parse(localStorage.getItem('searchedList')) || [];
 let lastSearch = localStorage.getItem('lastSearch') || 'Raleigh';
@@ -27,12 +48,14 @@ $('#searchIcon').click(() => {
 
 $('form').submit((e)=>{
   e.preventDefault();
-  lastSearch = $('input').val();
+  lastSearch = $('input').val().trim();
   $('input').val('');
+  console.log(lastSearch);
   lastSearch && runSearch(lastSearch);
 });
 
-$('.searchListItem').click(function() {
+$('.collection').on('click','.searchListItem', function() {
+  console.log($(this).text());
   lastSearch = $(this).text();
   lastSearch && runSearch(lastSearch);
 });
@@ -71,8 +94,7 @@ function runSearch(searchTerm) {
     localStorage.setItem('lastSearch', searchTerm);
     $('h2').text(resp.name);
     let imgHTML =
-      '<img width=300 height=200 src="http://openweathermap.org/img/wn/';
-    imgHTML += `${resp.weather[0].icon}@2x.png" alt="Current Icon">`;
+      `<img width=300 height=200 src=${iconData[resp.weather[0].main.toLowerCase()].day} alt="Current Icon">`;
     $('#currentIcon').append(imgHTML);
     $('#weatherDesc').text(
       resp.weather[0].description[0].toUpperCase() +
@@ -129,11 +151,10 @@ function printExtendedForecast(searchTerm) {
       cardImgDiv.addClass('card-image');
       cardImg.attr(
         'src',
-        `http://openweathermap.org/img/wn/${filteredForecastList[
-          i
-        ].weather[0].icon.slice(0, 2)}d@2x.png`
+        iconData[filteredForecastList[i].weather[0].main.toLowerCase()].day
       );
       cardImg.attr('alt', `${filteredForecastList[i].weather[0].main}`);
+      cardImg.attr('width', 130).attr('height', 130).attr('style','width: auto !important; margin: 0 auto');
       cardSpan.addClass('card-title extendedTitle');
       cardSpan.text(
         new Date(filteredForecastList[i].dt_txt).toLocaleDateString('en-US')
