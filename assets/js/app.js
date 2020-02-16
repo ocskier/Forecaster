@@ -60,14 +60,14 @@ $('.collection').on('click','.searchListItem', function() {
   lastSearch && runSearch(lastSearch);
 });
 
-async function init() {
+function init() {
     searchedList && printSearchedCities();  
     runSearch(lastSearch);  
 }
 
 function printSearchedCities() {
-  $('.collection').empty();
   let collection = $('.collection');
+  collection.empty();
   collection.attr('style', 'visibility: visible');
   for (let i = 0; i < searchedList.length; i++) {
     collection.append(`<li class="collection-item searchListItem">${searchedList[i]}</li>`)
@@ -78,14 +78,15 @@ function buildUrl(baseUrl,extendedUrl) {
   return baseUrl+extendedUrl
 }
 
-function runSearch(searchTerm) {
+async function runSearch(searchTerm) {
   for (el in ['h2', '#weatherDesc']) {
     $(el).text('');
   }
   $('#weatherDetails').empty();
   $('#currentIcon img').remove();
 
-  $.get(buildUrl(searchUrl,`&q=${searchTerm}`)).then(resp => {
+  try {
+    let resp = await $.get(buildUrl(searchUrl,`&q=${searchTerm}`));
     if (searchedList.indexOf(searchTerm) === -1) {
       searchedList.push(searchTerm);
       localStorage.setItem('searchedList', JSON.stringify(searchedList));
@@ -112,15 +113,17 @@ function runSearch(searchTerm) {
     );
     $('#todaysForecast').attr('style', 'visibility: visible');
     printExtendedForecast(searchTerm);
-  }).catch((err) => {
+  }
+  catch(err) {
     console.log(err);
-  });
+  }
 }
 
-function printExtendedForecast(searchTerm) {
+async function printExtendedForecast(searchTerm) {
   $('#extendedForecast').empty();
 
-  $.get(buildUrl(forecastUrl,`&q=${searchTerm}`)).then(resp => {
+  try {
+    let resp = await $.get(buildUrl(forecastUrl,`&q=${searchTerm}`));
     let today = new Date();
     const filteredForecastList = resp.list
       .filter(item => new Date(item.dt_txt).getDate() != today.getDate())
@@ -202,8 +205,8 @@ function printExtendedForecast(searchTerm) {
 
     let col6 = $('<div class="col s12 l1"></div>');
     $('#extendedForecast').append(col6);
-  }).catch((err) => {
+  } catch (err) {
     console.log(err);
-  });
+  }
 }
 
