@@ -89,36 +89,40 @@ async function runSearch(searchTerm) {
 
   try {
     let resp = await $.get(buildUrl(searchUrl, `&q=${searchTerm}`));
-    if (searchedList.indexOf(searchTerm) === -1) {
-      searchedList.push(searchTerm);
-      localStorage.setItem('searchedList', JSON.stringify(searchedList));
+    resp &&
+      searchedList.indexOf(searchTerm) === -1 &&
+      searchedList.push(searchTerm) &&
       printSearchedCities();
-    }
-    localStorage.setItem('lastSearch', searchTerm);
-    $('h2').text(resp.name);
-    let imgHTML = `<img width=300 height=200 src=${
-      iconData[resp.weather[0].main.toLowerCase()].day
-    } alt="Current Icon">`;
-    $('#currentIcon').append(imgHTML);
-    $('#weatherDesc').text(
-      resp.weather[0].description[0].toUpperCase() +
-        resp.weather[0].description.slice(1)
-    );
-    $('#weatherDetails').append(
-      `<span style="font-size:3.2rem;padding-bottom:12px">${Math.round(
-        resp.main.temp_max
-      )}°F</span>
-      <div style="display: flex;display: flex;justify-content: space-around;">
-      <span>Wind Chill: ${Math.round(resp.main.feels_like)}°F</span>
-      <span>Wind: ${Math.floor(resp.wind.speed)} mph</span>
-      <span>Humidity: ${resp.main.humidity}%</span>
-      </div>`
-    );
-    $('#todaysForecast').attr('style', 'visibility: visible');
-    printExtendedForecast(searchTerm);
+    resp && localStorage.setItem('lastSearch', searchTerm);
+    resp && localStorage.setItem('searchedList', JSON.stringify(searchedList));
+    resp && printTodaysForecast(resp);
+    resp && printExtendedForecast(searchTerm);
   } catch (err) {
     console.log(err);
   }
+}
+
+function printTodaysForecast(data) {
+  $('h2').text(data.name);
+  let imgHTML = `<img width=300 height=200 src=${
+    iconData[data.weather[0].main.toLowerCase()].day
+  } alt="Current Icon">`;
+  $('#currentIcon').append(imgHTML);
+  $('#weatherDesc').text(
+    data.weather[0].description[0].toUpperCase() +
+      data.weather[0].description.slice(1)
+  );
+  $('#weatherDetails').append(
+    `<span style="font-size:3.2rem;padding-bottom:12px">${Math.round(
+      data.main.temp_max
+    )}°F</span>
+      <div style="display: flex;display: flex;justify-content: space-around;">
+      <span>Wind Chill: ${Math.round(data.main.feels_like)}°F</span>
+      <span>Wind: ${Math.floor(data.wind.speed)} mph</span>
+      <span>Humidity: ${data.main.humidity}%</span>
+      </div>`
+  );
+  $('#todaysForecast').attr('style', 'visibility: visible');
 }
 
 async function printExtendedForecast(searchTerm) {
@@ -171,6 +175,7 @@ async function printExtendedForecast(searchTerm) {
 
       cardContent.addClass('card-content center extendedContent');
       contentP.addClass('extendedText');
+      contentP.attr('style', 'font-size:1.1rem;');
       let todaysWeather = filteredForecastList[i].weather[0];
       contentP.text(
         todaysWeather.description[0].toUpperCase() +
