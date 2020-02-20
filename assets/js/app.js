@@ -1,26 +1,26 @@
 const iconData = {
   clear: {
     day: 'assets/icons/iconfinder_weather-clear_118959.png',
-    night: 'assets/icons/iconfinder_weather-icons-night-clear_2087717.png'
+    night: 'assets/icons/iconfinder_weather-icons-night-clear_2087717.png',
   },
   clouds: {
-    day: 'assets/icons/iconfinder_icon-20-clouds_316271.png'
+    day: 'assets/icons/iconfinder_icon-20-clouds_316271.png',
   },
   rain: {
-    day: 'assets/icons/iconfinder_weather-showers-scattered_118964.png'
+    day: 'assets/icons/iconfinder_weather-showers-scattered_118964.png',
   },
   thunderstorm: {
-    day: 'assets/icons/iconfinder_thunderstorm-ranny_1221016.png'
+    day: 'assets/icons/iconfinder_thunderstorm-ranny_1221016.png',
   },
   snow: {
-    day: 'assets/icons/iconfinder_cloud_snow_367530.png'
+    day: 'assets/icons/iconfinder_cloud_snow_367530.png',
   },
   mist: {
-    day: 'assets/icons/iconfinder_weather_30_2682821.png'
+    day: 'assets/icons/iconfinder_weather_30_2682821.png',
   },
   drizzle: {
-    day: 'assets/icons/iconfinder_weather-showers-scattered_118964.png'
-  }
+    day: 'assets/icons/iconfinder_weather-showers-scattered_118964.png',
+  },
 };
 
 let searchedList = JSON.parse(localStorage.getItem('searchedList')) || [];
@@ -46,16 +46,16 @@ $('#searchIcon').click(() => {
   );
 });
 
-$('form').submit((e) => {
+$('form').submit(e => {
   e.preventDefault();
-  lastSearch = $('input').val().trim();
+  lastSearch = $('input')
+    .val()
+    .trim();
   $('input').val('');
-  console.log(lastSearch);
   lastSearch && runSearch(lastSearch);
 });
 
-$('.collection').on('click', '.searchListItem', function () {
-  console.log($(this).text());
+$('.collection').on('click', '.searchListItem', function() {
   lastSearch = $(this).text();
   lastSearch && runSearch(lastSearch);
 });
@@ -70,12 +70,14 @@ function printSearchedCities() {
   collection.empty();
   collection.attr('style', 'visibility: visible');
   for (let i = 0; i < searchedList.length; i++) {
-    collection.append(`<li class="collection-item searchListItem">${searchedList[i]}</li>`)
+    collection.append(
+      `<li class="collection-item searchListItem">${searchedList[i]}</li>`
+    );
   }
 }
 
 function buildUrl(baseUrl, extendedUrl) {
-  return baseUrl + extendedUrl
+  return baseUrl + extendedUrl;
 }
 
 async function runSearch(searchTerm) {
@@ -94,12 +96,13 @@ async function runSearch(searchTerm) {
     }
     localStorage.setItem('lastSearch', searchTerm);
     $('h2').text(resp.name);
-    let imgHTML =
-      `<img width=300 height=200 src=${iconData[resp.weather[0].main.toLowerCase()].day} alt="Current Icon">`;
+    let imgHTML = `<img width=300 height=200 src=${
+      iconData[resp.weather[0].main.toLowerCase()].day
+    } alt="Current Icon">`;
     $('#currentIcon').append(imgHTML);
     $('#weatherDesc').text(
       resp.weather[0].description[0].toUpperCase() +
-      resp.weather[0].description.slice(1)
+        resp.weather[0].description.slice(1)
     );
     $('#weatherDetails').append(
       `<span style="font-size:3.2rem;padding-bottom:12px">${Math.round(
@@ -125,9 +128,9 @@ async function printExtendedForecast(searchTerm) {
     let resp = await $.get(buildUrl(forecastUrl, `&q=${searchTerm}`));
     let today = new Date();
     const filteredForecastList = resp.list
-      .filter(item => new Date(item.dt_txt).getDate() != today.getDate())
-      .filter(item => new Date(item.dt_txt).getHours() === 12);
-
+      .filter(item => new Date(item.dt_txt).getHours() > 12)
+      .filter(item => new Date(item.dt_txt).getHours() <= 15)
+      .filter(item => new Date(item.dt_txt).getDate() != today.getDate());
     let col1 = $('<div class="col s12 l1"></div>');
     $('#extendedForecast').append(col1);
 
@@ -156,7 +159,10 @@ async function printExtendedForecast(searchTerm) {
         iconData[filteredForecastList[i].weather[0].main.toLowerCase()].day
       );
       cardImg.attr('alt', `${filteredForecastList[i].weather[0].main}`);
-      cardImg.attr('width', 130).attr('height', 130).attr('style', 'width: auto !important; margin: 0 auto');
+      cardImg
+        .attr('width', 130)
+        .attr('height', 130)
+        .attr('style', 'width: auto !important; margin: 0 auto');
       cardSpan.addClass('card-title extendedTitle');
       cardSpan.text(
         new Date(filteredForecastList[i].dt_txt).toLocaleDateString('en-US')
@@ -168,7 +174,7 @@ async function printExtendedForecast(searchTerm) {
       let todaysWeather = filteredForecastList[i].weather[0];
       contentP.text(
         todaysWeather.description[0].toUpperCase() +
-        todaysWeather.description.slice(1)
+          todaysWeather.description.slice(1)
       );
       contentDetails.addClass('extendedDetails').html(
         `<span style="font-size:2.2rem">${Math.round(
@@ -189,8 +195,7 @@ async function printExtendedForecast(searchTerm) {
       );
       cardContent.append(contentP, contentDetails, contentPrecip);
 
-      cardAction
-        .addClass('card-action')
+      cardAction.addClass('card-action');
       let actionA = $('<a href="#"></a>').text('This is a link');
       cardAction.append(actionA);
 
