@@ -71,7 +71,7 @@ function printSearchedCities() {
   collection.attr('style', 'visibility: visible');
   for (let i = 0; i < searchedList.length; i++) {
     collection.append(
-      `<li class="collection-item searchListItem">${searchedList[i]}</li>`
+      `<li class="collection-item searchListItem">${searchedList[i].toUpperCase()}</li>`
     );
   }
 }
@@ -90,10 +90,10 @@ async function runSearch(searchTerm) {
   try {
     let resp = await $.get(buildUrl(searchUrl, `&q=${searchTerm}`));
     resp &&
-      searchedList.indexOf(searchTerm) === -1 &&
-      searchedList.push(searchTerm) &&
+      searchedList.indexOf(searchTerm.toLowerCase()) === -1 &&
+      searchedList.push(searchTerm.toLowerCase()) &&
       printSearchedCities();
-    resp && localStorage.setItem('lastSearch', searchTerm);
+    resp && localStorage.setItem('lastSearch', searchTerm.toLowerCase());
     resp && localStorage.setItem('searchedList', JSON.stringify(searchedList));
     resp && printTodaysForecast(resp);
     resp && printExtendedForecast(searchTerm);
@@ -103,7 +103,7 @@ async function runSearch(searchTerm) {
 }
 
 function printTodaysForecast(data) {
-  $('h2').text(data.name);
+  $('h2').text(data.name.toUpperCase());
   let imgHTML = `<img width=300 height=200 src=${
     iconData[data.weather[0].main.toLowerCase()].day
   } alt="Current Icon">`;
