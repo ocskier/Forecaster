@@ -18,6 +18,7 @@ nav {
   min-height: 475px;
   background-color: lightgray;
   box-shadow: 0px 0px 20px 0px white;
+  padding-top: 1rem;
 }
 
 .card {

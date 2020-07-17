@@ -29,7 +29,7 @@ let lastSearch = localStorage.getItem('lastSearch') || 'Raleigh';
 const searchUrl =
   'https://api.openweathermap.org/data/2.5/weather?APPID=833a5451ef3423413fe6e789b8687cf3&units=imperial';
 const forecastUrl =
-  'https://api.openweathermap.org/data/2.5/forecast?APPID=833a5451ef3423413fe6e789b8687cf3&units=imperial';
+  'https://api.openweathermap.org/data/2.5/onecall?APPID=833a5451ef3423413fe6e789b8687cf3&units=imperial&exclude=hourly,minutely';
 
 // let iconUrl = 'https://api.iconfinder.com/v3/icons/search?';
 // iconUrl += 'client_id=mXK8DHYcamId9eZ9lMHRipV2zSMQdn3oPi1GkmT12Pq4FmKtTPiNqfmIxsgNb93W&';
@@ -96,7 +96,7 @@ async function runSearch(searchTerm) {
     resp && localStorage.setItem('lastSearch', searchTerm.toLowerCase());
     resp && localStorage.setItem('searchedList', JSON.stringify(searchedList));
     resp && printTodaysForecast(resp);
-    resp && printExtendedForecast(searchTerm);
+    resp && printExtendedForecast(searchTerm,resp.coord.lat,resp.coord.lon);
   } catch (err) {
     console.log(err);
   }
@@ -125,20 +125,22 @@ function printTodaysForecast(data) {
   $('#todaysForecast').attr('style', 'visibility: visible');
 }
 
-async function printExtendedForecast(searchTerm) {
+async function printExtendedForecast(searchTerm,lat,lon) {
   $('#extendedForecast').empty();
 
   try {
-    let resp = await $.get(buildUrl(forecastUrl, `&q=${searchTerm}`));
-    let today = new Date();
-    const filteredForecastList = resp.list
-      .filter(item => new Date(item.dt_txt).getHours() > 12)
-      .filter(item => new Date(item.dt_txt).getHours() <= 15)
-      .filter(item => new Date(item.dt_txt).getDate() != today.getDate());
+    let resp = await $.get(buildUrl(forecastUrl, `&lat=${lat}&lon=${lon}`));
+    // old code for the 40 3hr increments of forecast data
+    // let today = new Date();
+    // const filteredForecastList = resp.list
+    //   .filter(item => new Date(item.dt_txt).getDate() != today.getDate())
+    //   .filter(item => new Date(item.dt_txt).getHours() === 12);
+    const filteredForecastList = resp.daily;
+    console.log(filteredForecastList);
     let col1 = $('<div class="col s12 l1"></div>');
     $('#extendedForecast').append(col1);
 
-    for (let i = 0; i < filteredForecastList.length; i++) {
+    for (let i = 1; i < 6; i++) {
       let middleCol = $('<div></div>');
       let cardRow = $('<div></div>');
       let cardCol = $('<div></div>');
@@ -169,39 +171,39 @@ async function printExtendedForecast(searchTerm) {
         .attr('style', 'width: auto !important; margin: 0 auto');
       cardSpan.addClass('card-title extendedTitle');
       cardSpan.text(
-        new Date(filteredForecastList[i].dt_txt).toLocaleDateString('en-US')
+        new Date(filteredForecastList[i].dt).toLocaleDateString('en-US')
       );
       cardImgDiv.append(cardSpan, cardImg);
 
       cardContent.addClass('card-content center extendedContent');
       contentP.addClass('extendedText');
       contentP.attr('style', 'font-size:1.1rem;');
-      let todaysWeather = filteredForecastList[i].weather[0];
+      let weather = filteredForecastList[i].weather[0];
       contentP.text(
-        todaysWeather.description[0].toUpperCase() +
-          todaysWeather.description.slice(1)
+        weather.description[0].toUpperCase() +
+        weather.description.slice(1)
       );
       contentDetails.addClass('extendedDetails').html(
         `<span style="font-size:2.2rem">${Math.round(
-          filteredForecastList[i].main.temp_max
+          filteredForecastList[i].temp.max
         )}°F</span>
         <span>Wind Chill: ${Math.round(
-          filteredForecastList[i].main.feels_like
+          filteredForecastList[i].feels_like.day
         )}°F</span>
-        <span>Wind: ${Math.floor(filteredForecastList[i].wind.speed)} mph</span>
-        <span>Humidity: ${filteredForecastList[i].main.humidity}%</span>`
+        <span>Wind: ${Math.floor(filteredForecastList[i].wind_speed)} mph</span>
+        <span>Humidity: ${filteredForecastList[i].humidity}%</span>`
       );
       contentPrecip.text(
         `Precip: ${
           filteredForecastList[i]['rain']
-            ? filteredForecastList[i].rain['3h']
+            ? (filteredForecastList[i].rain/25.4).toFixed(2)
             : 0
         }`
       );
       cardContent.append(contentP, contentDetails, contentPrecip);
 
       cardAction.addClass('card-action');
-      let actionA = $('<a href="#"></a>').text('This is a link');
+      let actionA = $('<a href="#">This is a link</a>');
       cardAction.append(actionA);
 
       card.append(cardImgDiv, cardContent, cardAction);
