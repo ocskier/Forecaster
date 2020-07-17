@@ -116,7 +116,7 @@ function printTodaysForecast(data) {
     `<span style="font-size:3.2rem;padding-bottom:12px">${Math.round(
       data.main.temp_max
     )}°F</span>
-      <div style="display: flex;display: flex;justify-content: space-around;">
+      <div style="display: flex;flex-direction: column;justify-content: space-around;">
       <span>Wind Chill: ${Math.round(data.main.feels_like)}°F</span>
       <span>Wind: ${Math.floor(data.wind.speed)} mph</span>
       <span>Humidity: ${data.main.humidity}%</span>
@@ -136,7 +136,7 @@ async function printExtendedForecast(searchTerm,lat,lon) {
     //   .filter(item => new Date(item.dt_txt).getDate() != today.getDate())
     //   .filter(item => new Date(item.dt_txt).getHours() === 12);
     const filteredForecastList = resp.daily;
-    console.log(filteredForecastList);
+    $('#weatherDetails').find('div').append(`<span>UV Index: ${filteredForecastList[0].uvi}</span>`);
     let col1 = $('<div class="col s12 l1"></div>');
     $('#extendedForecast').append(col1);
 
