@@ -171,7 +171,7 @@ async function printExtendedForecast(searchTerm,lat,lon) {
         .attr('style', 'width: auto !important; margin: 0 auto');
       cardSpan.addClass('card-title extendedTitle');
       cardSpan.text(
-        new Date(filteredForecastList[i].dt).toLocaleDateString('en-US')
+        new Date(filteredForecastList[i].dt*1000).toDateString()
       );
       cardImgDiv.append(cardSpan, cardImg);
 
