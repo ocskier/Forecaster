@@ -2,7 +2,7 @@
 
 A simple weather app using the OpenWeather API and HTML, CSS, and JS
 
-<img width=200 height=200 src="https://avatars1.githubusercontent.com/u/36890724?v=4">
+![Forecaster.PNG](assets/Forecaster.PNG)
 
 ## Prerequisites
 
