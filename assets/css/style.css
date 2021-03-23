@@ -1,8 +1,9 @@
 body {
-  background-image: url('../kenrick-mills-1h2Pg97SXfA-unsplash-min.jpg');
+  /* background-image: url('../kenrick-mills-1h2Pg97SXfA-unsplash-min.jpg');
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover; */
+  background-color: lightgray;
 }
 
 nav {
