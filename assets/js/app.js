@@ -16,6 +16,22 @@ class OWAPI {
   getWeather = (searchTerm) => $.get(buildUrl(searchUrl, `&q=${searchTerm}`));
   getForecast = (lat, lon) =>
     $.get(buildUrl(forecastUrl, `&lat=${lat}&lon=${lon}`));
+  runSearch = (city) => {
+    const search = async () => {
+      try {
+        const weatherData = await this.getWeather(city);
+
+        const forecastData = await this.getForecast(
+          weatherData.coord.lat,
+          weatherData.coord.lon
+        );
+        return { weatherData, forecastData };
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    return search();
+  };
 }
 class Screen {
   constructor() {
@@ -43,6 +59,13 @@ class Screen {
   };
   setLastSearch = (city) => {
     this.lastSearch = city;
+  };
+  clearWeather = () => {
+    // for (el in ['h2', '#weatherDesc']) {
+    //   $(el).text('');
+    // }
+    this.weatherDetailsEl.empty();
+    $('#currentIcon img').remove();
   };
   printSearchedCities = () => {
     this.cityCollectionEl.empty();
@@ -159,6 +182,19 @@ class Screen {
     let col6 = $('<div class="col s12 l1"></div>');
     $('#extendedForecast').append(col6);
   };
+  rerenderWholeForecast = ({ forecastData, weatherData }) => {
+    this.clearWeather();
+    this.updateCityInfo();
+    this.printTodaysForecast(weatherData);
+    this.printExtendedForecast(forecastData);
+  };
+  updateCityInfo = () => {
+    this.searchedList.indexOf(this.lastSearch.toLowerCase()) === -1 &&
+      this.searchedList.push(this.lastSearch.toLowerCase()) &&
+      this.printSearchedCities();
+    localStorage.setItem('lastSearch', this.lastSearch.toLowerCase());
+    localStorage.setItem('searchedList', JSON.stringify(this.searchedList));
+  };
 }
 
 class App {
@@ -166,66 +202,39 @@ class App {
     this.API = new OWAPI();
     this.screen = new Screen();
   }
+  init = async () => {
+    let self = this;
+    this.screen.searchEl.click(this.screen.hideSearch);
 
-  runSearch = async () => {
-    try {
-      const weatherData = await this.API.getWeather(this.screen.lastSearch);
-      // for (el in ['h2', '#weatherDesc']) {
-      //   $(el).text('');
-      // }
-      this.screen.weatherDetailsEl.empty();
-      $('#currentIcon img').remove();
-      weatherData &&
-        this.screen.searchedList.indexOf(
-          this.screen.lastSearch.toLowerCase()
-        ) === -1 &&
-        this.screen.searchedList.push(this.screen.lastSearch.toLowerCase()) &&
-        this.screen.printSearchedCities();
-      weatherData &&
-        localStorage.setItem(
-          'lastSearch',
-          this.screen.lastSearch.toLowerCase()
-        );
-      weatherData &&
-        localStorage.setItem(
-          'searchedList',
-          JSON.stringify(this.screen.searchedList)
-        );
-      weatherData && this.screen.printTodaysForecast(weatherData);
-      const forecastData = await this.API.getForecast(
-        weatherData.coord.lat,
-        weatherData.coord.lon
-      );
-      this.screen.printExtendedForecast(forecastData);
-    } catch (err) {
-      console.log(err);
-    }
+    this.screen.form.submit(async function (e) {
+      const input = self.screen.getInputCity(e);
+      if (input) {
+        self.screen.setLastSearch(input);
+        const data = await self.API.runSearch(input);
+        data.weatherData && self.screen.rerenderWholeForecast(data);
+      }
+    });
+
+    this.screen.cityCollectionEl.on(
+      'click',
+      '.searchListItem',
+      async function () {
+        let input = $(this).text().trim();
+        self.screen.setLastSearch(input);
+        const data = await self.API.runSearch(input);
+        data.weatherData && self.screen.rerenderWholeForecast(data);
+      }
+    );
+
+    this.screen.searchedList && this.screen.printSearchedCities();
+    const data = await this.API.runSearch(this.screen.lastSearch);
+    console.log(data);
+    data.weatherData && this.screen.rerenderWholeForecast(data);
   };
 }
 
 const WeatherDashboard = new App();
-
-WeatherDashboard.screen.searchEl.click(WeatherDashboard.screen.hideSearch);
-
-WeatherDashboard.screen.form.submit(function (e) {
-  const input = WeatherDashboard.screen.getInputCity(e);
-  WeatherDashboard.screen.setLastSearch(input);
-  WeatherDashboard.runSearch();
-});
-
-WeatherDashboard.screen.cityCollectionEl.on(
-  'click',
-  '.searchListItem',
-  function () {
-    let input = $(this).text().trim();
-    input && WeatherDashboard.screen.setLastSearch(input);
-    input && WeatherDashboard.runSearch();
-  }
-);
-
-WeatherDashboard.screen.searchedList &&
-  WeatherDashboard.screen.printSearchedCities();
-WeatherDashboard.runSearch();
+WeatherDashboard.init();
 
 // data &&
 //   searchedList.indexOf(searchTerm.toLowerCase()) === -1 &&

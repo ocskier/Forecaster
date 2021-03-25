@@ -3,7 +3,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover; */
-  background-color: lightgray;
+  background: radial-gradient(rgb(205, 234, 247), rgb(63, 142, 202)) !important;
 }
 
 nav {
@@ -34,16 +34,19 @@ nav {
 .collection {
   visibility: hidden;
   border: none;
+  padding: 1rem;
+  margin-left: 1.5rem;
 }
 
 .searchListItem {
-  margin: 8px !important;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 0px white;
+  margin: 0.8rem 1.2rem !important;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 4px 0px white;
 }
 
 .searchListItem:hover {
-  transform: scale(1.15);
+  transform: scale(1.08);
+  border-radius: 0.5rem;
 }
 
 .extendedTitle {
@@ -85,6 +88,9 @@ nav {
 
   .extendedContent {
     font-size: 1.8rem;
+  }
+  .searchListItem {
+    margin: 0.8rem 4.6rem !important;
   }
 }
 
