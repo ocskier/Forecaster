@@ -2,6 +2,14 @@
 
 A simple weather app using the OpenWeather API and HTML, CSS, and JS
 
+## Table of Contents
+- [Prerequisites](#Prerequisites)
+- [Usage](#Usage)
+- [Deployment](#Deployment)
+- [Authors](#Authors)
+- [Contributing](#Contributing)
+- [License](#License)
+
 ![Forecaster.PNG](assets/Forecaster.PNG)
 
 ## Prerequisites
