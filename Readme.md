@@ -32,4 +32,4 @@ https://ocskier.github.io/Forecaster/
 Please make sure to update tests as appropriate.
 
 ## License
-<img src="https://img.shields.io/static/v1?label=LICENSE&message=MIT&color=BLUE">
+[<img src="https://img.shields.io/static/v1?label=LICENSE&message=MIT&color=BLUE">](LICENSE)
