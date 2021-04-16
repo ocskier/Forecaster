@@ -3,6 +3,12 @@ class App {
     this.API = new OWAPI();
     this.screen = new Screen();
   }
+  getLocation(cb) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      console.log(position);
+      cb(position.coords.latitude, position.coords.longitude);
+    });
+  }
   init = async () => {
     let self = this;
     this.screen.searchEl.click(this.screen.hideSearch);
@@ -28,9 +34,21 @@ class App {
     );
 
     this.screen.searchedList && this.screen.printSearchedCities();
-    const data = await this.API.runSearch(this.screen.lastSearch);
-    console.log(data);
-    data.weatherData && this.screen.rerenderWholeForecast(data);
+    this.getLocation(async (lat, lon) => {
+      const {
+        plus_code: { compound_code },
+      } = await $.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyD_tgpw_aI3elBJ3FQzH5kqi00Qep6jXxM`
+      );
+      let userCity = compound_code.split(' ')[1].split(',')[0];
+      this.screen.lastSearch =
+        this.screen.lastSearch && this.screen.lastSearch != userCity
+          ? this.screen.lastSearch
+          : userCity;
+      const data = await this.API.runSearch(this.screen.lastSearch);
+      console.log(data);
+      data.weatherData && this.screen.rerenderWholeForecast(data);
+    });
   };
 }
 
