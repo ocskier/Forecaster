@@ -11,7 +11,7 @@ class App {
   }
   init = async () => {
     let self = this;
-    this.screen.searchEl.click(this.screen.hideSearch);
+    this.screen.searchEls.click(this.screen.hideSearch);
 
     this.screen.form.submit(async function (e) {
       const input = self.screen.getInputCity(e);
