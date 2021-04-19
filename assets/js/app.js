@@ -7,7 +7,7 @@ class App {
     navigator.geolocation.getCurrentPosition(function (position) {
       console.log(position);
       cb(position.coords.latitude, position.coords.longitude);
-    },function(err){console.log(err)});
+    });
   }
   init = async () => {
     let self = this;
