@@ -1,8 +1,8 @@
 class Screen {
   constructor() {
     this.searchedList = JSON.parse(localStorage.getItem('searchedList')) || [];
-    this.lastSearch = localStorage.getItem('lastSearch') || 'Raleigh';
-    this.searchEl = $('#searchIcon');
+    this.lastSearch = localStorage.getItem('lastSearch');
+    this.searchEls = $('.searchIcon');
     this.form = $('form');
     this.cityInputEl = $('input');
     this.cityCollectionEl = $('.collection');
