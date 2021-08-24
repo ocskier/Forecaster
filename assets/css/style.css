@@ -36,6 +36,10 @@ nav {
   display: none;
 }
 
+.card-image {
+  min-height: 12.5em;
+}
+
 .collection {
   visibility: hidden;
   border: none;
@@ -93,7 +97,6 @@ nav {
 }
 
 @media only screen and (max-width: 976px) {
-
   .extendedContent {
     font-size: 1.8rem;
   }
