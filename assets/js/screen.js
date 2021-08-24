@@ -44,7 +44,7 @@ class Screen {
   printTodaysForecast = (data) => {
     $('h2').text(data.name.toUpperCase());
     let imgHTML = `<img width=300 height=200 src=${
-      iconData[data.weather[0].main.toLowerCase()].day
+      iconData[data.weather[0].main.toLowerCase()]?.day
     } alt="Current Icon">`;
     $('#currentIcon').append(imgHTML);
     $('#weatherDesc').text(

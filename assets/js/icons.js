@@ -21,4 +21,7 @@ const iconData = {
   drizzle: {
     day: 'assets/icons/iconfinder_weather-showers-scattered_118964.png',
   },
+  smoke: {
+    day: 'assets/icons/smoke_weather_icon_129607.png',
+  },
 };
