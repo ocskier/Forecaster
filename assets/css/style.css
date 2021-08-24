@@ -47,10 +47,13 @@ nav {
   margin: 0.8rem 1.2rem !important;
   border-radius: 0.5rem;
   box-shadow: 0px 0px 4px 0px white;
+  transform: scale(1);
+  transition: transform 0.2s;
 }
 
 .searchListItem:hover {
   transform: scale(1.08);
+  transition: transform 0.2s;
   border-radius: 0.5rem;
 }
 
